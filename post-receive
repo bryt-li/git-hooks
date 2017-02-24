@@ -19,7 +19,7 @@ fi
 # Get the latest commit subject
 SUBJECT=$(git log -1 --pretty=format:"%s")
 echo>&2 "checking commit info: $SUBJECT" 
-IS_DEPLOY=$(echo "$SUBJECT" | grep "[deploy]")
+IS_DEPLOY=$(echo "$SUBJECT" | grep "\[deploy\]")
 
 echo $IS_DEPLOY
 if [ -z "$IS_DEPLOY" ]; then
