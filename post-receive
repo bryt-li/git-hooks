@@ -20,54 +20,54 @@ fi
 
 # Check the remote git repository whetherit is bare
 IS_BARE=$(git rev-parse --is-bare-repository)
-echo > &2 "checking source repo bare." 
+echo "checking source repo bare." 
 if [ -z "$IS_BARE" ]; then
-    echo > &2 "post-receive: fatal: this repo is not bare. Exit." 
+    echo "post-receive: fatal: this repo is not bare. Exit." 
     exit 1
 fi
 
 # Get the latest commit subject
 SUBJECT=$(git log -1 --pretty=format:"%s")
-echo > &2 "checking commit info: $SUBJECT" 
+echo "checking commit info: $SUBJECT" 
 IS_DEPLOY=$(echo "$SUBJECT" | grep "\[deploy\]")
 
 echo $IS_DEPLOY
 if [ -z "$IS_DEPLOY" ]; then
-   echo > &2 "post-receive: info: Not Deploy. Exit." 
+   echo "post-receive: info: Not Deploy. Exit." 
    exit 1
 fi
 
-echo > &2 "Auto deployment activated." 
+echo "Auto deployment activated." 
 
 # Check the deploy dir whether it exists
 if [ ! -d $DEPLOY_DIR ] ; then
-   echo > &2 "post-receive: fatal: Deploy directory does not exist:\"$DEPLOY_DIR\"" 
+   echo "post-receive: fatal: Deploy directory does not exist:\"$DEPLOY_DIR\"" 
    exit 1
 fi
 
 if [ ! -d $BUILD_DIR ] ; then
-   echo > &2 "post-receive: fatal: Build directory does not exist:\"$BUILD_DIR\"" 
+   echo "post-receive: fatal: Build directory does not exist:\"$BUILD_DIR\"" 
    exit 1
 fi
 
 # Build
 unset GIT_DIR
 
-echo > &2 "go into $BUILD_DIR"
+echo "go into $BUILD_DIR"
 cd $BUILD_DIR
 
-echo > &2 "git reset --hard"
+echo "git reset --hard"
 git reset --hard
 
-echo > &2 "git pull origin master"
+echo "git pull origin master"
 git pull origin master
 
-echo > &2 "cnpm install"
+echo "cnpm install"
 cnpm install
 
-echo > &2 "npm run build"
+echo "npm run build"
 npm run build
 
 # Copy desired files to deploy
-echo > &2 "cp -rf $BUILD_DIR/dist/* $DEPLOY_DIR"
+echo "cp -rf $BUILD_DIR/dist/* $DEPLOY_DIR"
 cp -rf $BUILD_DIR/dist/* $DEPLOY_DIR
