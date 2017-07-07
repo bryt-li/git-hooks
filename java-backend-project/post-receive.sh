@@ -2,9 +2,8 @@
 
 set -e
 
-DEPLOY_DIR=/var/www/foo-h5
-BUILD_DIR=/tmp/build/foo-h5
-NODE_PATH=/opt/node-v4.5.0-linux-x64/bin
+DEPLOY_DIR=/var/www/foo-java
+BUILD_DIR=/tmp/build/foo-java
 
 # Check if push occur in master branch
 read oldrev newrev refname
@@ -47,10 +46,6 @@ if [ ! -d $BUILD_DIR ] ; then
 fi
 
 # Prepare build env
-export PATH=$PATH:$NODE_PATH
-alias cnpm="npm --registry=https://registry.npm.taobao.org \
---cache=/tmp/.npm/.cache/cnpm \
---disturl=https://npm.taobao.org/dist"
 
 # Build
 unset GIT_DIR
@@ -64,12 +59,5 @@ git reset --hard
 echo "git pull origin master"
 git pull origin master
 
-echo "cnpm install"
-cnpm install
-
-echo "npm run build"
-npm run build
-
-# Copy desired files to deploy
-echo "cp -rf $BUILD_DIR/dist/* $DEPLOY_DIR"
-cp -rf $BUILD_DIR/dist/* $DEPLOY_DIR
+echo "mvn deploy"
+mvn tomcat7:deploy
