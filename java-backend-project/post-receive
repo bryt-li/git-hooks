@@ -52,5 +52,9 @@ git reset --hard
 echo "git pull origin master"
 git pull origin master
 
+echo "mvn undeploy"
+mvn tomcat7:undeploy
+
+
 echo "mvn deploy"
 mvn tomcat7:deploy
