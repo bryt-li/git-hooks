@@ -2,7 +2,6 @@
 
 set -e
 
-DEPLOY_DIR=/var/www/foo-java
 BUILD_DIR=/tmp/build/foo-java
 
 # Check if push occur in master branch
@@ -33,12 +32,6 @@ if [ -z "$IS_DEPLOY" ]; then
 fi
 
 echo "Auto deployment activated." 
-
-# Check the deploy dir whether it exists
-if [ ! -d $DEPLOY_DIR ] ; then
-   echo "post-receive: fatal: Deploy directory does not exist:\"$DEPLOY_DIR\"" 
-   exit 1
-fi
 
 if [ ! -d $BUILD_DIR ] ; then
    echo "post-receive: fatal: Build directory does not exist:\"$BUILD_DIR\"" 
